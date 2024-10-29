@@ -1,0 +1,35 @@
+module tb;
+  reg clk,rst;
+  wire [2:0]w1;
+  wire [2:0]w2;
+  wire [2:0]w3;
+  wire [2:0]w4;
+  reg [2:0]count;
+  reg  [2:0]ps;
+  traffic_lig_controller all(clk,rst,w1,w2,w3,w4);
+  initial
+begin
+    clk=1'b0;
+    forever #1 clk=~clk;
+end
+
+initial
+begin
+    rst=0;
+    #5;
+    rst=1;
+    #100;
+    rst=0;
+    #10;
+    $finish;
+end
+  initial begin
+    $monitor("clk=%b,rst=%b,w1=%b,w2=%b,w3=%b,w4=%b",clk,rst,w1,w2,w3,w4);
+  #110  $finish;
+  end
+  initial begin
+    $dumpfile("dump.vcd");
+    $dumpvars();
+  end
+endmodule
+  
