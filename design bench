@@ -1,0 +1,137 @@
+module traffic_lig_controller(clk,rst,w1,w2,w3,w4);
+  input clk,rst;
+  output reg [2:0]w1;
+  output reg [2:0]w2;
+  output reg [2:0]w3;
+  output reg [2:0]w4;
+  reg [3:0]count;
+  parameter s1=1,s2=2,s3=3,s4=4,s5=5,s6=6;
+  parameter sec3=3,sec4=4,sec5=5,sec6=6,sec7=7;//second for trafic signal time
+  reg [2:0]ps;//For assigning state parameter to present state (max 6) used 3 bit
+  always@ (posedge clk or  negedge rst)
+    begin
+      if(rst==0)
+        begin
+          ps<=s1;
+          count<=0;
+        end
+      else 
+        case(ps)
+          s1:
+            if(count<sec3)
+              begin
+                ps<=s1;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s2;
+                count=0;
+              end
+          s2:
+            if(count<sec4)
+              begin
+                ps<=s2;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s3;
+                count=0;
+              end
+          s3:
+            if(count<sec5)
+              begin
+                ps<=s3;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s4;
+                count=0;
+              end
+          s4:
+            if(count<sec5)
+              begin
+                ps<=s4;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s5;
+                count=0;
+              end
+          s5:
+            if(count<sec6)
+              begin
+                ps<=s5;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s6;
+                count=0;
+              end
+          s6:
+            if(count<sec7)
+              begin
+                ps<=s6;
+                count=count+1;
+              end
+          else
+              begin  
+                ps<=s1;
+                count=0;
+              end
+        endcase
+    end
+  //here the input to the w or light signal based on RYG correspondingly
+  always@(ps)
+    begin
+      case(ps)
+        s1:
+          begin
+          w1=3'b001;// 001 --> RYG --> green signal
+          w2=3'b001;
+          w3=3'b100;// 100 -->RYG --> red signal
+          w4=3'b100;
+          end
+        s2:
+          begin
+          w1=3'b001;
+          w2=3'b010;
+          w3=3'b100;
+          w4=3'b100;
+          end
+         s3:
+          begin
+          w1=3'b001;
+          w2=3'b100;
+          w3=3'b001;
+          w4=3'b100;
+          end
+         s4:
+          begin
+          w1=3'b010;
+          w2=3'b100;
+          w3=3'b010;
+          w4=3'b100;
+          end
+         s5:
+          begin
+          w1=3'b100;
+          w2=3'b100;
+          w3=3'b100;
+          w4=3'b001;
+          end
+         s6:
+          begin
+          w1=3'b100;
+          w2=3'b100;
+          w3=3'b100;
+          w4=3'b010;
+          end
+      endcase
+    end
+endmodule
+        
